@@ -1,4 +1,16 @@
+using Data.Models;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
+
+#region CONTEXT
+
+builder.Services.AddDbContext<DevLogDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DevlogConnection"));
+});
+
+#endregion
 
 // Add services to the container.
 
