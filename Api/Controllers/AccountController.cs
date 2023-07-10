@@ -16,6 +16,17 @@ namespace Api.Controllers
         }
 
         [HttpPost]
+        [Route("register")]
+        public async Task<ActionResult<IsRegisterViewModel>> PostRegisterUser(RegisterViewModel register)
+        {
+            IsRegisterViewModel isRegisterUser;
+            isRegisterUser = await _userService.RegisterUserAsync(register);
+
+            return Ok(isRegisterUser);
+        }
+
+        [HttpPost]
+        [Route("login")]
         public async Task<ActionResult<UserContextViewModel>> PostUserContext(LoginViewModel login)
         {
             UserContextViewModel userContext;

@@ -124,13 +124,13 @@ namespace Core.Services
         {
             UserContextViewModel user;
 
-            // string hashPassword =  PasswordHelper.EncodePasswordMd5(login.Password);
+             string hashPassword =  PasswordHelper.EncodePasswordMd5(login.password);
             string email = FixedText.FixedEmail(login.email);
 
             try
             {
                 user = await _context.Users.
-                Where(user => user.Email == email && user.Password == login.password)
+                Where(user => user.Email == email && user.Password == hashPassword)
                 .Select(user => new UserContextViewModel()
                 {
                     user_id = user.Id,
