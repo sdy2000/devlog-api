@@ -1,3 +1,5 @@
+using Core.Services;
+using Core.Services.Interfaces;
 using Data.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,6 +11,12 @@ builder.Services.AddDbContext<DevLogDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DevlogConnection"));
 });
+
+#endregion
+
+#region IoC
+
+builder.Services.AddScoped<IUserService, UserService>();
 
 #endregion
 
