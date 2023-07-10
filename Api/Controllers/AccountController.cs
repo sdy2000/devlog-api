@@ -19,7 +19,7 @@ namespace Api.Controllers
         public async Task<ActionResult<UserContextViewModel>> PostUserContext(LoginViewModel login)
         {
             UserContextViewModel userContext;
-            userContext = await _userService.LoginUser(login);
+            userContext = await _userService.LoginUserAsync(login);
 
             return Ok(userContext);
         }

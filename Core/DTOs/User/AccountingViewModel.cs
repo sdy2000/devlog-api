@@ -8,10 +8,29 @@ namespace Core.DTOs
         public string user_name { get; set; }
         public string email { get; set; }
     }
+
+    public class RegisterViewModel
+    {
+        public string user_name { get; set; }
+        public string email { get; set; }
+        public string password { get; set; }
+        public string re_password { get; set; }
+        public bool rules { get; set; }
+    }
+
+    public class IsRegisterViewModel
+    {
+        public bool is_exist_user_name { get; set; }
+        public bool is_exist_email { get; set; }
+        public bool is_add_user { get; set; }
+        public bool is_send_active_code { get; set; }
+        public bool is_success { get; set; }
+    }
+
     public class LoginViewModel
     {
-        public string Email { get; set; }
-        public string Password { get; set; }
-        public bool RememberMe { get; set; }
+        public string email { get; set; }
+        public string password { get; set; }
+        public bool rememberMe { get; set; }
     }
 }
