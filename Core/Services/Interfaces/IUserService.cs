@@ -20,5 +20,11 @@ namespace Core.Services.Interfaces
         Task<UserContextViewModel> LoginUserAsync(LoginViewModel login);
 
         #endregion
+
+        #region USER PANEL
+
+        Task<UserPanelInfoViewModel> GetUserForUserPanelAsync(UserContextViewModel user);
+
+        #endregion
     }
 }

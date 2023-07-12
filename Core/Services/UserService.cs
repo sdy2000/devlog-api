@@ -21,7 +21,7 @@ namespace Core.Services
         {
             try
             {
-               await _context.Users.AddAsync(user);
+                await _context.Users.AddAsync(user);
 
                 return true;
             }
@@ -46,7 +46,7 @@ namespace Core.Services
         {
             try
             {
-               await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
 
                 return true;
             }
@@ -59,7 +59,7 @@ namespace Core.Services
 
 
 
-        #region ACCOUNTING
+        #region ACCOUN
 
         public async Task<IsRegisterViewModel> RegisterUserAsync(RegisterViewModel register)
         {
@@ -100,7 +100,7 @@ namespace Core.Services
                 IsActive = true,
                 Password = PasswordHelper.EncodePasswordMd5(register.password),
                 UserAvatar = "No-Photo.jpg"
-                
+
             };
 
             bool addUser = await AddUserAsync(user);
@@ -124,7 +124,7 @@ namespace Core.Services
         {
             UserContextViewModel user;
 
-             string hashPassword =  PasswordHelper.EncodePasswordMd5(login.password);
+            string hashPassword = PasswordHelper.EncodePasswordMd5(login.password);
             string email = FixedText.FixedEmail(login.email);
 
             try
@@ -153,6 +153,34 @@ namespace Core.Services
             }
 
             return user;
+        }
+
+        #endregion
+
+        #region USER PANEL
+
+        public async Task<UserPanelInfoViewModel> GetUserForUserPanelAsync(UserContextViewModel user)
+        {
+            UserPanelInfoViewModel userInfo;
+
+
+            string email = FixedText.FixedEmail(user.email);
+
+            userInfo = await _context.Users.
+                Where(u => u.UserName == user.user_name && u.Email == email && user.user_id == user.user_id && u.IsActive)
+               .Select(u => new UserPanelInfoViewModel()
+               {
+                   email = u.Email,
+                   user_name = u.UserName,
+                   first_name = u.FirstName,
+                   last_name = u.LastName,
+                   user_avatar = u.UserAvatar,
+                   phone = u.Phone,
+                   gender = u.Gender,
+                   register_date = u.RegisterDate.ToString()
+               }).SingleAsync();
+
+            return userInfo;
         }
 
         #endregion

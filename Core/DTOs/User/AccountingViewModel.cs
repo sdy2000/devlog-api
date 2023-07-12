@@ -14,7 +14,6 @@ namespace Core.DTOs
         public string user_name { get; set; }
         public string email { get; set; }
         public string password { get; set; }
-        public string re_password { get; set; }
         public bool rules { get; set; }
     }
 
