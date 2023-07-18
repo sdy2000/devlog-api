@@ -16,7 +16,7 @@ namespace Api.Controllers
             _userService = userService;
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("user-info")]
         public async Task<ActionResult<UserPanelInfoViewModel>> GetUesrInfo(UserContextViewModel user)
         {

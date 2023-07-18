@@ -136,6 +136,13 @@ namespace Core.Services
                     user_id = user.Id,
                     user_name = user.UserName,
                     email = user.Email,
+                    first_name = user.FirstName,
+                    last_name = user.LastName,
+                    user_avatar = user.UserAvatar,
+                    phone = user.Phone,
+                    gender = user.Gender,
+                    register_date = user.RegisterDate.ToString("yyyy-MM-dd")
+
                 }).SingleOrDefaultAsync();
             }
             catch
@@ -167,7 +174,7 @@ namespace Core.Services
             string email = FixedText.FixedEmail(user.email);
 
             userInfo = await _context.Users.
-                Where(u => u.UserName == user.user_name && u.Email == email && user.user_id == user.user_id && u.IsActive)
+                Where(u => u.UserName == user.user_name && u.Email == email && u.Id == user.user_id && u.IsActive)
                .Select(u => new UserPanelInfoViewModel()
                {
                    email = u.Email,
@@ -177,7 +184,7 @@ namespace Core.Services
                    user_avatar = u.UserAvatar,
                    phone = u.Phone,
                    gender = u.Gender,
-                   register_date = u.RegisterDate.ToString()
+                   register_date = u.RegisterDate.ToString("yyyy-MM-dd")
                }).SingleAsync();
 
             return userInfo;
