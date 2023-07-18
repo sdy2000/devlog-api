@@ -31,6 +31,20 @@ namespace Core.Services
             }
         }
 
+        public bool UpdateUser(User user)
+        {
+            try
+            {
+                 _context.Users.Update(user);
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         public async Task<bool> IsExistUserNameAsync(string userName)
         {
             return await _context.Users.AnyAsync(u => u.UserName == userName);
@@ -59,6 +73,7 @@ namespace Core.Services
 
 
 
+        // TODO : Send Activation Email in RegisterUserAsync
         #region ACCOUN
 
         public async Task<IsRegisterViewModel> RegisterUserAsync(RegisterViewModel register)
@@ -164,6 +179,7 @@ namespace Core.Services
 
         #endregion
 
+        // TODO : Send Activation Email in EditUserFormUserPanelAsync
         #region USER PANEL
 
         public async Task<UserPanelInfoViewModel> GetUserForUserPanelAsync(UserContextViewModel user)
@@ -188,6 +204,54 @@ namespace Core.Services
                }).SingleAsync();
 
             return userInfo;
+        }
+
+        public async Task<IsEditUserViewModel> EditUserFromUserPanelAsync(EditUserFromUserPanelViewModel edit_user)
+        {
+            IsEditUserViewModel result = new IsEditUserViewModel();
+
+            User user = await _context.Users.
+                SingleOrDefaultAsync(user => user.UserName == edit_user.user_name && user.Id == edit_user.user_id);
+            string email = FixedText.FixedEmail(edit_user.email);
+
+            #region VALIDATION
+
+            if (edit_user == null)
+            {
+                result.is_success = false;
+
+                return result;
+            }
+            if (user.Email != edit_user.email && edit_user.email != null)
+            {
+                if (await IsExistEmailAsync(email))
+                {
+                    result.is_exist_email = true;
+                    result.is_success = false;
+
+                    return result;
+                }
+            }
+
+            #endregion
+
+            user.FirstName = edit_user.first_name;
+            user.LastName = edit_user.last_name;
+            user.Phone = edit_user.phone;
+            user.Gender = edit_user.gender;
+
+            // TODO : Send Activation Email
+            if (edit_user != null)
+            {
+                user.Email = email;
+                result.is_send_active_code = true;
+            }
+
+
+            UpdateUser(user);
+            result.is_success = await SaveChangeAsync();
+
+            return result;
         }
 
         #endregion

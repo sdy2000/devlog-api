@@ -9,6 +9,7 @@ namespace Core.Services.Interfaces
     {
 
         Task<bool> AddUserAsync(User user);
+        bool UpdateUser(User user);
         Task<bool> IsExistUserNameAsync(string userName);
         Task<bool> IsExistEmailAsync(string email);
         Task<bool> SaveChangeAsync();
@@ -24,6 +25,7 @@ namespace Core.Services.Interfaces
         #region USER PANEL
 
         Task<UserPanelInfoViewModel> GetUserForUserPanelAsync(UserContextViewModel user);
+        Task<IsEditUserViewModel> EditUserFromUserPanelAsync(EditUserFromUserPanelViewModel edit_user);
 
         #endregion
     }

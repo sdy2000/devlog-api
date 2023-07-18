@@ -25,5 +25,15 @@ namespace Api.Controllers
 
             return Ok(userInfo);
         }
+
+        [HttpPost]
+        [Route("user-edit")]
+        public async Task<ActionResult<IsEditUserViewModel>> GetUesrEdit([FromForm]EditUserFromUserPanelViewModel edit_user)
+        {
+            IsEditUserViewModel editUser;
+            editUser = await _userService.EditUserFromUserPanelAsync(edit_user);
+
+            return Ok(editUser);
+        }
     }
 }
