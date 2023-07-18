@@ -28,9 +28,9 @@ namespace Api.Controllers
 
         [HttpPost]
         [Route("user-edit")]
-        public async Task<ActionResult<IsEditUserViewModel>> GetUesrEdit([FromForm]EditUserFromUserPanelViewModel edit_user)
+        public async Task<ActionResult<EditedUserViewModel>> GetUesrEdit([FromForm]EditUserFromUserPanelViewModel edit_user)
         {
-            IsEditUserViewModel editUser;
+            EditedUserViewModel editUser;
             editUser = await _userService.EditUserFromUserPanelAsync(edit_user);
 
             return Ok(editUser);

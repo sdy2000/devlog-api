@@ -5,6 +5,7 @@ using Core.Security;
 using Core.Services.Interfaces;
 using Data.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Win32;
 
 namespace Core.Services
 {
@@ -206,13 +207,13 @@ namespace Core.Services
             return userInfo;
         }
 
-        public async Task<IsEditUserViewModel> EditUserFromUserPanelAsync(EditUserFromUserPanelViewModel edit_user)
+        public async Task<EditedUserViewModel> EditUserFromUserPanelAsync(EditUserFromUserPanelViewModel edit_user)
         {
-            IsEditUserViewModel result = new IsEditUserViewModel();
+            EditedUserViewModel result = new EditedUserViewModel();
 
             User user = await _context.Users.
-                SingleOrDefaultAsync(user => user.UserName == edit_user.user_name && user.Id == edit_user.user_id);
-            string email = FixedText.FixedEmail(edit_user.email);
+                SingleOrDefaultAsync(user => user.UserName == edit_user.user_name && user.Id == int.Parse(edit_user.user_id));
+            string email = FixedText.FixedEmail(edit_user?.email);
 
             #region VALIDATION
 
@@ -222,7 +223,7 @@ namespace Core.Services
 
                 return result;
             }
-            if (user.Email != edit_user.email && edit_user.email != null)
+            if (user.Email != email && email != null)
             {
                 if (await IsExistEmailAsync(email))
                 {
@@ -241,7 +242,7 @@ namespace Core.Services
             user.Gender = edit_user.gender;
 
             // TODO : Send Activation Email
-            if (edit_user != null)
+            if (email != null)
             {
                 user.Email = email;
                 result.is_send_active_code = true;
@@ -249,6 +250,18 @@ namespace Core.Services
 
 
             UpdateUser(user);
+            result.user = new UserContextViewModel()
+            {
+                user_id = user.Id,
+                user_name = user.UserName,
+                email = user.Email,
+                first_name = user.FirstName,
+                last_name = user.LastName,
+                user_avatar = user.UserAvatar,
+                phone = user.Phone,
+                gender = user.Gender,
+                register_date = user.RegisterDate.ToString("yyyy-MM-dd")
+            };
             result.is_success = await SaveChangeAsync();
 
             return result;

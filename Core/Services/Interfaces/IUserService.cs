@@ -25,7 +25,7 @@ namespace Core.Services.Interfaces
         #region USER PANEL
 
         Task<UserPanelInfoViewModel> GetUserForUserPanelAsync(UserContextViewModel user);
-        Task<IsEditUserViewModel> EditUserFromUserPanelAsync(EditUserFromUserPanelViewModel edit_user);
+        Task<EditedUserViewModel> EditUserFromUserPanelAsync(EditUserFromUserPanelViewModel edit_user);
 
         #endregion
     }

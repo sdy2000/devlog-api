@@ -4,7 +4,7 @@
     {
         public static string FixedEmail(string email)
         {
-            return email.Trim().ToLower();
+            return email==null?null: email.Trim().ToLower();
         }
     }
 }
