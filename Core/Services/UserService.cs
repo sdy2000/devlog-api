@@ -4,6 +4,7 @@ using Core.Generators;
 using Core.Security;
 using Core.Services.Interfaces;
 using Data.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Win32;
 
@@ -70,6 +71,93 @@ namespace Core.Services
                 return false;
             }
         }
+
+        public string UserImagePath(string folderName, string imgName)
+        {
+            string imagePath = Path.Combine(
+                 Directory.GetCurrentDirectory(),
+                 "wwwroot", "UserAvatar", folderName,
+                 imgName);
+
+            string path = Path.Combine(
+                 Directory.GetCurrentDirectory(),
+                 "wwwroot", "UserAvatar", folderName);
+
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+
+            return imagePath;
+        }
+
+        public async Task<string> SaveOrUpDateImg(IFormFile img, string imgName = "No-Photo.jpg")
+        {
+
+
+            if (img != null && img.IsImage() && !FileValidator.CheckIfExiclFile(img))
+            {
+
+                string normalPath = UserImagePath("NormalSize", imgName);
+                string thumbPath = UserImagePath("ThumbSize", imgName);
+                string iconPath = UserImagePath("IconSize", imgName);
+
+                if (imgName != "No-Photo.jpg")
+                {
+                    if (File.Exists(normalPath))
+                        File.Delete(normalPath);
+
+                    if (File.Exists(thumbPath))
+                        File.Delete(thumbPath);
+
+                    if (File.Exists(iconPath))
+                        File.Delete(iconPath);
+                }
+
+                imgName = new string
+                (Path.GetFileNameWithoutExtension(img.FileName).Take(10).ToArray()).Replace(' ', '-') + "-" +
+                NameGenerator.GeneratorUniqCode() + "-" +
+                DateTime.Now.ToString("yyyyMMddHH") + Path.GetExtension(img.FileName);
+
+                normalPath = UserImagePath("NormalSize", imgName);
+                thumbPath = UserImagePath("ThumbSize", imgName);
+                iconPath = UserImagePath("IconSize", imgName);
+
+                using (var stream = new FileStream(normalPath, FileMode.Create))
+                {
+                   await img.CopyToAsync(stream);
+                }
+
+
+                #region RESIZE IMAGE TO THUMB
+
+                ImageConvertor imgResizeThumb = new ImageConvertor();
+
+                imgResizeThumb.Image_resize(normalPath, thumbPath, 184);
+
+                #endregion
+
+                #region RESIZE IMAGE TO ICON
+
+                ImageConvertor imgResize = new ImageConvertor();
+
+                imgResize.Image_resize(normalPath, iconPath, 64);
+
+                #endregion
+
+
+                return imgName;
+            }
+            else if (imgName != "No-Photo.jpg")
+            {
+                return imgName;
+            }
+            else
+            {
+                return "No-Photo.jpg";
+            }
+        }
+
 
 
 
@@ -240,6 +328,7 @@ namespace Core.Services
             user.LastName = edit_user.last_name;
             user.Phone = edit_user.phone;
             user.Gender = edit_user.gender;
+            user.UserAvatar = await SaveOrUpDateImg(edit_user.user_avatar, user.UserAvatar);
 
             // TODO : Send Activation Email
             if (email != null)
