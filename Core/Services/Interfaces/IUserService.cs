@@ -29,6 +29,7 @@ namespace Core.Services.Interfaces
 
         Task<UserPanelInfoViewModel> GetUserForUserPanelAsync(UserContextViewModel user);
         Task<EditedUserViewModel> EditUserFromUserPanelAsync(EditUserFromUserPanelViewModel edit_user);
+        Task<UserPassResponsViewModel> ChengPasswordAsync(EditUserPassViewModel user_pass);
 
         #endregion
     }

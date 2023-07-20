@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace Core.DTOs
 {
+    // User Info View Model
     public class UserPanelInfoViewModel
     {
         public string user_name { get; set; }
@@ -15,6 +16,8 @@ namespace Core.DTOs
         public string register_date { get; set; }
     }
 
+
+    // Edit User View Model 
     public class EditUserFromUserPanelViewModel
     {
         public string user_id { get; set; }
@@ -34,4 +37,23 @@ namespace Core.DTOs
         public bool is_send_active_code { get; set; }
         public bool is_success { get; set; }
     }
+
+
+    // Edit User View Model 
+    public class EditUserPassViewModel
+    {
+        public int user_id { get; set; }
+        public string user_name { get; set; }
+        public string old_password { get; set; }
+        public string new_password { get; set; }
+        public string re_new_password { get; set; }
+    }
+
+    public class UserPassResponsViewModel
+    {
+        public bool is_old_pass { get; set; }
+        public bool is_success { get; set; }
+    }
+
+
 }

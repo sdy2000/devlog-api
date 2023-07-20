@@ -28,12 +28,22 @@ namespace Api.Controllers
 
         [HttpPost]
         [Route("user-edit")]
-        public async Task<ActionResult<EditedUserViewModel>> GetUesrEdit([FromForm]EditUserFromUserPanelViewModel edit_user)
+        public async Task<ActionResult<EditedUserViewModel>> GetUesrEdit([FromForm] EditUserFromUserPanelViewModel edit_user)
         {
             EditedUserViewModel editUser;
             editUser = await _userService.EditUserFromUserPanelAsync(edit_user);
 
             return Ok(editUser);
+        }
+
+        [HttpPost]
+        [Route("user-pass")]
+        public async Task<ActionResult<UserPassResponsViewModel>> GetUesrEditPass(EditUserPassViewModel edit_pass)
+        {
+            UserPassResponsViewModel editPass;
+            editPass = await _userService.ChengPasswordAsync(edit_pass);
+
+            return Ok(editPass);
         }
     }
 }

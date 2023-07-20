@@ -37,7 +37,7 @@ namespace Core.Services
         {
             try
             {
-                 _context.Users.Update(user);
+                _context.Users.Update(user);
 
                 return true;
             }
@@ -125,7 +125,7 @@ namespace Core.Services
 
                 using (var stream = new FileStream(normalPath, FileMode.Create))
                 {
-                   await img.CopyToAsync(stream);
+                    await img.CopyToAsync(stream);
                 }
 
 
@@ -352,6 +352,43 @@ namespace Core.Services
                 register_date = user.RegisterDate.ToString("yyyy-MM-dd")
             };
             result.is_success = await SaveChangeAsync();
+
+            return result;
+        }
+
+        public async Task<UserPassResponsViewModel> ChengPasswordAsync(EditUserPassViewModel user_pass)
+        {
+            UserPassResponsViewModel result = new UserPassResponsViewModel();
+
+            string oldPass = PasswordHelper.EncodePasswordMd5(user_pass.old_password);
+            string newPass = PasswordHelper.EncodePasswordMd5(user_pass.new_password);
+
+            User user = await _context.Users
+                .SingleOrDefaultAsync(user => user.UserName == user_pass.user_name && user.Id == user_pass.user_id);
+
+            #region VALIDATION
+
+            if (user == null)
+            {
+                result.is_success = false;
+
+                return result;
+            }
+
+            if (user.Password != oldPass)
+            {
+                result.is_old_pass = false;
+                result.is_success = false;
+
+                return result;
+            }
+
+            #endregion
+
+            user.Password = newPass;
+
+            UpdateUser(user);
+            result.is_success= await SaveChangeAsync();
 
             return result;
         }
