@@ -377,11 +377,12 @@ namespace Core.Services
 
             if (user.Password != oldPass)
             {
-                result.is_old_pass = false;
+                result.is_old_pass_true = false;
                 result.is_success = false;
 
                 return result;
             }
+            result.is_old_pass_true = true;
 
             #endregion
 

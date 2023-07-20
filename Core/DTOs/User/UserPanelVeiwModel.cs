@@ -51,7 +51,7 @@ namespace Core.DTOs
 
     public class UserPassResponsViewModel
     {
-        public bool is_old_pass { get; set; }
+        public bool is_old_pass_true { get; set; }
         public bool is_success { get; set; }
     }
 
