@@ -85,10 +85,6 @@ public partial class DevLogDbContext : DbContext
             entity.Property(e => e.Email).HasMaxLength(150);
             entity.Property(e => e.FirstName).HasMaxLength(50);
             entity.Property(e => e.Gender).HasMaxLength(20);
-            entity.Property(e => e.IsDeleted)
-                .HasMaxLength(10)
-                .HasDefaultValueSql("((0))")
-                .IsFixedLength();
             entity.Property(e => e.LastName).HasMaxLength(50);
             entity.Property(e => e.Password).HasMaxLength(150);
             entity.Property(e => e.Phone).HasMaxLength(15);

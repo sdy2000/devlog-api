@@ -11,6 +11,7 @@ namespace Core.Services.Interfaces
 
         Task<bool> AddUserAsync(User user);
         bool UpdateUser(User user);
+        Task<User> GetUserByActiveCodeAsync(string activeCode);
         Task<bool> IsExistUserNameAsync(string userName);
         Task<bool> IsExistEmailAsync(string email);
         Task<bool> SaveChangeAsync();
@@ -21,6 +22,7 @@ namespace Core.Services.Interfaces
         #region ACCOUNT
 
         Task<IsRegisterViewModel> RegisterUserAsync(RegisterViewModel register);
+        Task<ActiveAccountViewModel> ActiveAccountAsync(string activeCode);
         Task<UserContextViewModel> LoginUserAsync(LoginViewModel login);
 
         #endregion

@@ -2,11 +2,11 @@
 using Core.DTOs;
 using Core.Generators;
 using Core.Security;
+using Core.Senders;
 using Core.Services.Interfaces;
 using Data.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Win32;
 
 namespace Core.Services
 {
@@ -45,6 +45,11 @@ namespace Core.Services
             {
                 return false;
             }
+        }
+
+        public async Task<User> GetUserByActiveCodeAsync(string activeCode)
+        {
+            return await _context.Users.SingleOrDefaultAsync(u => u.ActiveCode == activeCode);
         }
 
         public async Task<bool> IsExistUserNameAsync(string userName)
@@ -162,7 +167,7 @@ namespace Core.Services
 
 
 
-        // TODO : Send Activation Email in RegisterUserAsync
+        // TODO : Update remmember me value from LoginUser method 
         #region ACCOUN
 
         public async Task<IsRegisterViewModel> RegisterUserAsync(RegisterViewModel register)
@@ -200,8 +205,7 @@ namespace Core.Services
                 UserName = register.user_name,
                 Email = FixedText.FixedEmail(register.email),
                 ActiveCode = NameGenerator.GeneratorUniqCode(),
-                // After Add Email Sender Update IsActive
-                IsActive = true,
+                IsActive = false,
                 Password = PasswordHelper.EncodePasswordMd5(register.password),
                 UserAvatar = "No-Photo.jpg"
 
@@ -209,10 +213,25 @@ namespace Core.Services
 
             bool addUser = await AddUserAsync(user);
 
-            // TODO Email Activator
             #region SEND ACTIVATION EMAIL
 
+            if (addUser)
+            {
+                try
+                {
+                    string body = EmailBodyGenerator.SendActiveEmail(user.UserName, user.ActiveCode);
+                    bool isSendEmail = SendEmail.Send(user.Email, "Activation", body);
 
+                    result.is_send_active_code = true;
+                }
+                catch
+                {
+                    result.is_send_active_code = false;
+                    result.is_success = false;
+
+                    return result;
+                }
+            }
 
             #endregion
 
@@ -222,6 +241,32 @@ namespace Core.Services
             return result;
         }
 
+        public async Task<ActiveAccountViewModel> ActiveAccountAsync(string activeCode)
+        {
+            ActiveAccountViewModel result = new ActiveAccountViewModel();
+
+            User user = await GetUserByActiveCodeAsync(activeCode);
+
+            if (user == null || user.IsActive)
+            {
+                result.is_exits_user = false;
+
+                return result;
+            }
+
+            user.IsActive = true;
+            user.ActiveCode = NameGenerator.GeneratorUniqCode();
+
+            UpdateUser(user);
+            bool isUpdate = await SaveChangeAsync();
+
+            result.user_name = user.UserName;
+            result.email = user.Email;
+            result.is_exits_user = true;
+            result.is_active = true;
+
+            return result;
+        }
 
         //TODO: Update remmember me value from LoginUser method 
         public async Task<UserContextViewModel> LoginUserAsync(LoginViewModel login)
@@ -389,7 +434,7 @@ namespace Core.Services
             user.Password = newPass;
 
             UpdateUser(user);
-            result.is_success= await SaveChangeAsync();
+            result.is_success = await SaveChangeAsync();
 
             return result;
         }

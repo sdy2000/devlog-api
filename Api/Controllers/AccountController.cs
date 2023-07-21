@@ -25,6 +25,16 @@ namespace Api.Controllers
             return Ok(isRegisterUser);
         }
 
+        [HttpGet]
+        [Route("active-account/{id}")]
+        public async Task<ActionResult<ActiveAccountViewModel>> PostRegisterUser(string id)
+        {
+            ActiveAccountViewModel activeAccount;
+            activeAccount = await _userService.ActiveAccountAsync(id);
+
+            return Ok(activeAccount);
+        }
+
         [HttpPost]
         [Route("login")]
         public async Task<ActionResult<UserContextViewModel>> PostUserContext(LoginViewModel login)

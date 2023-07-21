@@ -27,7 +27,7 @@ public partial class User
 
     public bool IsActive { get; set; }
 
-    public string IsDeleted { get; set; } = null!;
+    public bool IsDeleted { get; set; }
 
     public DateTime RegisterDate { get; set; }
 

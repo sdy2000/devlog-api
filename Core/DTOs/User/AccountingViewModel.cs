@@ -15,6 +15,8 @@ namespace Core.DTOs
         public string register_date { get; set; }
     }
 
+
+    // Register User
     public class RegisterViewModel
     {
         public string user_name { get; set; }
@@ -31,6 +33,18 @@ namespace Core.DTOs
         public bool is_success { get; set; }
     }
 
+
+    // Register User
+    public class ActiveAccountViewModel
+    {
+        public string user_name { get; set; }
+        public string email { get; set; }
+        public bool is_exits_user { get; set; }
+        public bool is_active { get; set; }
+    }
+
+
+    // Login User
     public class LoginViewModel
     {
         public string email { get; set; }
