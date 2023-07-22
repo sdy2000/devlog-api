@@ -362,6 +362,36 @@ namespace Core.Services
             return result;
         }
 
+        public async Task<RetierePasswordResponsViewModel> RetrievePasswordAsync(RetierePasswordViewModel retieve)
+        {
+            RetierePasswordResponsViewModel result = new RetierePasswordResponsViewModel();
+
+            User user = await GetUserByActiveCodeAsync(retieve.active_code);
+            string hasPass = PasswordHelper.EncodePasswordMd5(retieve.password);
+
+            #region VALIDATION
+
+            if (user == null)
+            {
+                result.is_exist_user = false;
+                result.is_success = false;
+
+                return result;
+            }
+
+            #endregion
+
+            user.ActiveCode = NameGenerator.GeneratorUniqCode();
+            user.IsActive = true;
+            user.Password = hasPass;
+
+            UpdateUser(user);
+            result.is_exist_user = true;
+            result.is_success = await SaveChangeAsync();
+
+            return result;
+        }
+
         #endregion
 
 

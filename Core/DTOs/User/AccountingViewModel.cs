@@ -64,4 +64,18 @@ namespace Core.DTOs
         public bool is_send_edit_pass { get; set; }
         public bool is_success { get; set; }
     }
+
+
+    // Retiere Password
+    public class RetierePasswordViewModel
+    {
+        public string active_code { get; set; }
+        public string password { get; set; }
+        public string re_password { get; set; }
+    }
+    public class RetierePasswordResponsViewModel
+    {
+        public bool is_exist_user { get; set; }
+        public bool is_success { get; set; }
+    }
 }

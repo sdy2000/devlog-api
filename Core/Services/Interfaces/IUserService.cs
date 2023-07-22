@@ -23,6 +23,7 @@ namespace Core.Services.Interfaces
         Task<ActiveAccountViewModel> ActiveAccountAsync(string activeCode);
         Task<UserContextViewModel> LoginUserAsync(LoginViewModel login);
         Task<ForgotPasswordResponsViewModel> ForgotPasswordAsync(ForgotPasswordViewModel forgot);
+        Task<RetierePasswordResponsViewModel> RetrievePasswordAsync(RetierePasswordViewModel retieve);
 
         #endregion
 

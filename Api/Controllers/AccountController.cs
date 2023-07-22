@@ -54,5 +54,15 @@ namespace Api.Controllers
 
             return Ok(forgotRes);
         }
+
+        [HttpPost]
+        [Route("retrieve-pass")]
+        public async Task<ActionResult<RetierePasswordResponsViewModel>> PostretrievePasswod(RetierePasswordViewModel retieve)
+        {
+            RetierePasswordResponsViewModel retieveRes;
+            retieveRes = await _userService.RetrievePasswordAsync(retieve);
+
+            return Ok(retieveRes);
+        }
     }
 }
