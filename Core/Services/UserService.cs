@@ -383,7 +383,7 @@ namespace Core.Services
                 try
                 {
                     string body = EmailBodyGenerator.SendActiveEmail(user.UserName, user.ActiveCode);
-                    bool isSendEmail = SendEmail.Send(user.Email, "Activation New Email", body);
+                    bool isSendEmail = SendEmail.Send(email, "Activation New Email", body);
 
                     user.IsActive = false;
                     result.is_send_active_code = true;
