@@ -311,6 +311,56 @@ namespace Core.Services
             return user;
         }
 
+        public async Task<ForgotPasswordResponsViewModel> ForgotPasswordAsync(ForgotPasswordViewModel forgot)
+        {
+            ForgotPasswordResponsViewModel result = new ForgotPasswordResponsViewModel();
+
+            string email = FixedText.FixedEmail(forgot?.email);
+            User user = await _context.Users.SingleOrDefaultAsync(user => user.Email == email);
+
+            #region VALIDATION
+
+            if (user == null)
+            {
+                result.is_exist_email = false;
+                result.is_success = false;
+
+                return result;
+            }
+
+            #endregion
+
+
+            #region SEND Retrieve Password
+
+            if (email != null)
+            {
+                try
+                {
+                    string body = EmailBodyGenerator.SendChengePasword(user.UserName, user.ActiveCode);
+                    bool isSendEmail = SendEmail.Send(email, "Retrieve Password", body);
+
+                    user.IsActive = false;
+
+                    result.is_send_edit_pass = true;
+                }
+                catch
+                {
+                    result.is_send_edit_pass = false;
+                    result.is_success = false;
+
+                    return result;
+                }
+            }
+
+            #endregion
+
+            UpdateUser(user);
+            result.is_success = await SaveChangeAsync();
+
+            return result;
+        }
+
         #endregion
 
 
@@ -386,6 +436,8 @@ namespace Core.Services
                     bool isSendEmail = SendEmail.Send(email, "Activation New Email", body);
 
                     user.IsActive = false;
+                    user.Email = email;
+
                     result.is_send_active_code = true;
                 }
                 catch

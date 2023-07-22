@@ -34,7 +34,7 @@ namespace Core.DTOs
     }
 
 
-    // Register User
+    // Active Account
     public class ActiveAccountViewModel
     {
         public string user_name { get; set; }
@@ -50,5 +50,18 @@ namespace Core.DTOs
         public string email { get; set; }
         public string password { get; set; }
         public bool remember_me { get; set; }
+    }
+
+
+    // Forgot Password
+    public class ForgotPasswordViewModel
+    {
+        public string email { get; set; }
+    }
+    public class ForgotPasswordResponsViewModel
+    {
+        public bool is_exist_email { get; set; }
+        public bool is_send_edit_pass { get; set; }
+        public bool is_success { get; set; }
     }
 }

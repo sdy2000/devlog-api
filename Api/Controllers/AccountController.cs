@@ -44,5 +44,15 @@ namespace Api.Controllers
 
             return Ok(userContext);
         }
+
+        [HttpPost]
+        [Route("forgot-pass")]
+        public async Task<ActionResult<ForgotPasswordResponsViewModel>> PostForgotPasswod(ForgotPasswordViewModel forgot)
+        {
+            ForgotPasswordResponsViewModel forgotRes;
+            forgotRes = await _userService.ForgotPasswordAsync(forgot);
+
+            return Ok(forgotRes);
+        }
     }
 }
