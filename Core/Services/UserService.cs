@@ -330,6 +330,7 @@ namespace Core.Services
 
             #endregion
 
+            result.is_exist_email = true;
 
             #region SEND Retrieve Password
 
