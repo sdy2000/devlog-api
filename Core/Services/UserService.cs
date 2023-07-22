@@ -386,6 +386,8 @@ namespace Core.Services
             user.Password = hasPass;
 
             UpdateUser(user);
+            result.user_name = user.UserName;
+            result.email = user.Email;
             result.is_exist_user = true;
             result.is_success = await SaveChangeAsync();
 

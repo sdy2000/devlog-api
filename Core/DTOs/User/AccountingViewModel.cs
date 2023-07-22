@@ -75,6 +75,8 @@ namespace Core.DTOs
     }
     public class RetierePasswordResponsViewModel
     {
+        public string user_name { get; set; }
+        public string email { get; set; }
         public bool is_exist_user { get; set; }
         public bool is_success { get; set; }
     }
