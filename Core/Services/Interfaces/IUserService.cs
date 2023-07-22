@@ -1,8 +1,6 @@
 ﻿using Core.DTOs;
 using Data.Models;
 using Microsoft.AspNetCore.Http;
-using System.Threading.Tasks;
-//using Data.Models;
 
 namespace Core.Services.Interfaces
 {

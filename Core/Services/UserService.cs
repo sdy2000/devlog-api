@@ -313,7 +313,7 @@ namespace Core.Services
 
         #endregion
 
-        // TODO : Send Activation Email in EditUserFormUserPanelAsync
+
         #region USER PANEL
 
         public async Task<UserPanelInfoViewModel> GetUserForUserPanelAsync(UserContextViewModel user)
@@ -375,12 +375,29 @@ namespace Core.Services
             user.Gender = edit_user.gender;
             user.UserAvatar = await SaveOrUpDateImg(edit_user.user_avatar, user.UserAvatar);
 
-            // TODO : Send Activation Email
+
+            #region SEND ACTIVATION EMAIL
+
             if (email != null)
             {
-                user.Email = email;
-                result.is_send_active_code = true;
+                try
+                {
+                    string body = EmailBodyGenerator.SendActiveEmail(user.UserName, user.ActiveCode);
+                    bool isSendEmail = SendEmail.Send(user.Email, "Activation New Email", body);
+
+                    user.IsActive = false;
+                    result.is_send_active_code = true;
+                }
+                catch
+                {
+                    result.is_send_active_code = false;
+                    result.is_success = false;
+
+                    return result;
+                }
             }
+
+            #endregion
 
 
             UpdateUser(user);
